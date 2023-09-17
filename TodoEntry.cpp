@@ -2,7 +2,7 @@
 using namespace std;
 
 TodoEntry::TodoEntry(string content, bool isPlain) {
-    content = content;
+    this->content = content;
 }
 TodoEntry::TodoEntry(string encoded) {
     content = TodoEntry::decode(encoded);

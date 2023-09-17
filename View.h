@@ -19,7 +19,7 @@ public:
 private:
     int look, listLastLine, height, width, size;
     WINDOW* screen;
-    string modes[6] = {"view", "add", "edit", "remove", "prioritize", "deprioritize"};
+    string modes[6] = {"view", "add: ", "modify to: ", "remove? ", "emphasize by: ", "deemphasize by: "};
 };
 
 #endif 

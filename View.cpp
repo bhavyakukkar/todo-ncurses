@@ -6,6 +6,7 @@ using namespace std;
 View::View() {
     look = 0;
     listLastLine = 1;
+    setlocale(LC_ALL, "");
     screen = initscr();
     cbreak();
     curs_set(0);
@@ -23,43 +24,53 @@ void View::drawFrame() {
     int i;
 
     for(i = 0; i < this->height-2; i++) {
-        mvaddch(1+i, 0, '┃');
-        mvaddch(1+i, this->width-1, '┃');
+        mvaddstr(1+i, 0, "┃");
+        mvaddstr(1+i, this->width-1, "┃");
     }
     for(i = 0; i < this->width-2; i++) {
-        mvaddch(0, 1+i, '━');
-        mvaddch(this->height-3, 1+i, '━');
-        mvaddch(this->height-1, 1+i, '━');
+        mvaddstr(0, 1+i, "━");
+        mvaddstr(this->height-3, 1+i, "━");
+        mvaddstr(this->height-1, 1+i, "━");
     }
-    mvaddch(0, 0, '┏'); mvaddch(0, this->width-1, '┓');
-    mvaddch(this->height-3, 0, '┣'); mvaddch(this->height-3, this->width-1, '┫');
-    mvaddch(this->height-1, 0, '┗'); try { mvaddch(this->height-1, this->width-1, '┛'); } catch(int x) {} //writing to last char (bottom right) throws error after writing
+    mvaddstr(0, 0, "┏"); mvaddstr(0, this->width-1, "┓");
+    mvaddstr(this->height-3, 0, "┣"); mvaddstr(this->height-3, this->width-1, "┫");
+    mvaddstr(this->height-1, 0, "┗"); try { mvaddstr(this->height-1, this->width-1, "┛"); } catch(int x) {} //writing to last char (bottom right) throws error after writing
 }
 void View::updateList(TodoList* todoList) {
     int line = 1, entry, pen, ch, y, x;
     string content;
-    bool color;
+    int color;
     this->size = todoList->listSize;
     for(entry = 0; entry < this->size; entry++) {
         content = todoList->getEntry(entry);
-        color = (entry != this->look) ? 0 : A_REVERSE;
+        color = (entry != this->look) ? COLOR_PAIR(0) : A_REVERSE;
         //mvaddstr(line, 2, " > ", color | A_BOLD);
+        attron(color);
+        attron(A_BOLD);
         mvaddstr(line, 2, " > ");
+        attroff(A_BOLD);
+        attroff(color);
         pen = 5;
         for(ch = 0; ch < content.length(); ch++) {
             if(pen > this->width-3) {
                 line++;
                 //mvaddstr(line, 2, "   ", color);
+                attron(color);
                 mvaddstr(line, 2, "   ");
+                attroff(color);
                 pen = 5;
             }
             //mvaddch(line, pen, content[ch], color);
-            mvaddch(line, pen, content[ch]);
+            attron(color);
+            mvaddch(line, pen, content.at(ch));
+            attroff(color);
             pen++;
         }
         while(pen <= this->width-3) {
             //mvaddch(line, pen, ' ', color);
+            attron(color);
             mvaddch(line, pen, ' ');
+            attroff(color);
             pen++;
         }
         line++;

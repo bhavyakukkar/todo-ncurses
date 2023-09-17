@@ -6,16 +6,19 @@
 using namespace std;
 
 TodoList::TodoList(string location) {
-    location = location;
+    this->location = location;
     listSize = 0;
     listHead = NULL;
     listTail = NULL;
 }
 void TodoList::readFromFile() {
     //todo
+    TodoEntry* todo = new TodoEntry("buy pink thigh-highs"), *todo2 = new TodoEntry("touch grass");
+    this->addEntry(todo);
+    this->addEntry(todo2);
 }
 void TodoList::writeToFile() {
-    string binOut = this->encode();
+    /*string binOut = this->encode();
     fstream fs;
     fs.open(location, ios::binary | ios::out);
     if(fs.is_open() == 0) {
@@ -25,7 +28,7 @@ void TodoList::writeToFile() {
         fs.write((char*) &binOut, sizeof(binOut));
     }
     fs.close();
-    this->freeList();
+    this->freeList();*/
 }
 string TodoList::getEntry(int entryId) {
     struct TodoList::TodoNode *listTemp = this->getNodeAt(entryId);
@@ -34,6 +37,7 @@ string TodoList::getEntry(int entryId) {
     return "";
 }
 void TodoList::addEntry(TodoEntry* todo) {
+    this->listSize += 1;
     if(this->listHead == NULL) {
         this->listHead = (struct TodoList::TodoNode*)malloc(sizeof(struct TodoList::TodoNode));
         this->listTail = this->listHead;
@@ -45,7 +49,7 @@ void TodoList::addEntry(TodoEntry* todo) {
         this->listTail = this->listTail->next;
     }
     this->listTail->todo = todo;
-    this->listHead->next = NULL;
+    this->listTail->next = NULL;
 }
 //[1]
 void TodoList::addEntry(string content) {
@@ -125,8 +129,8 @@ void TodoList::decode(string encoded) {
 }
 struct TodoList::TodoNode* TodoList::getNodeAt(int id) {
     int i;
-    struct TodoList::TodoNode *listTemp;
-    if(id < 0 || id >= this->listSize)
+    struct TodoList::TodoNode *listTemp = this->listHead;
+    if(listTemp == NULL || id < 0 || id >= this->listSize)
         return NULL;
     //optimize by deciding whether traverse forward from head or backward from tail
     for(i = 0; i < id; i++)

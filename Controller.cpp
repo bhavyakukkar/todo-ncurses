@@ -6,10 +6,10 @@ using namespace std;
 
 Controller::Controller(View* view, TodoList* todoList, struct Controller::options* options) {
     todoList->readFromFile();
-    options = options;
+    this->options = options;
     mode = 0;
-    view = view;
-    todoList = todoList;
+    this->view = view;
+    this->todoList = todoList;
 }
 void Controller::makeView() {
     this->view->drawFrame();

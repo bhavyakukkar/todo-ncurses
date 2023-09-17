@@ -1,1 +1,2 @@
 - check if terminal allows colors before using attron/attroff from [here](https://www.linuxjournal.com/content/programming-color-ncurses)
+- read up on [makefiles](https://www.youtube.com/watch?v=_r7i5X0rXJk)
